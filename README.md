@@ -1,5 +1,4 @@
-# Welcome to your Lovable project
-
+# Welcome to your Minimal E-Commerce Elegant UI Project
 ## Project info
 
 
