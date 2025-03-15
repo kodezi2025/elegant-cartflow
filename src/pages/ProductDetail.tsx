@@ -3,15 +3,17 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/lib/CartContext";
+import { useWishlist } from "@/lib/WishlistContext";
 import { getProductById, products } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, ArrowLeft, Star, Minus, Plus } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Star, Minus, Plus, Heart } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart, isInCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   
@@ -49,6 +51,17 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, quantity);
+    }
+  };
+  
+  // Handle wishlist
+  const toggleWishlist = () => {
+    if (product) {
+      if (isInWishlist(product.id)) {
+        removeFromWishlist(product.id);
+      } else {
+        addToWishlist(product);
+      }
     }
   };
   
@@ -150,6 +163,18 @@ const ProductDetail = () => {
                   >
                     <ShoppingBag className="mr-2 h-5 w-5" />
                     {isInCart(product.id) ? "Update Cart" : "Add to Cart"}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                    onClick={toggleWishlist}
+                  >
+                    <Heart 
+                      className={`mr-2 h-5 w-5 ${isInWishlist(product.id) ? 'fill-primary text-primary' : ''}`} 
+                    />
+                    {isInWishlist(product.id) ? "Remove from Wishlist" : "Add to Wishlist"}
                   </Button>
                 </div>
               </div>
