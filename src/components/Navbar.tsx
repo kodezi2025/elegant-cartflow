@@ -1,13 +1,15 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "@/lib/CartContext";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { useWishlist } from "@/lib/WishlistContext";
+import { ShoppingBag, Search, Menu, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const { getCartItemCount } = useCart();
+  const { getWishlistCount } = useWishlist();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -65,6 +67,15 @@ const Navbar = () => {
               <Search className="h-5 w-5" />
             </Link>
             
+            <Link to="/wishlist" className="btn-icon relative">
+              <Heart className="h-5 w-5" />
+              {getWishlistCount() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-medium h-5 w-5 flex items-center justify-center rounded-full animate-scale-up">
+                  {getWishlistCount()}
+                </span>
+              )}
+            </Link>
+            
             <Link to="/cart" className="btn-icon relative">
               <ShoppingBag className="h-5 w-5" />
               {getCartItemCount() > 0 && (
@@ -108,6 +119,13 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               Shop
+            </Link>
+            <Link 
+              to="/wishlist" 
+              className="block text-base font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Wishlist
             </Link>
           </div>
         </div>
